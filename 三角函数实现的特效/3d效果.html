@@ -193,7 +193,7 @@
 		        	var x=this.radius*Math.sin(sTheta*i)*Math.cos(sAlpha*j);
 		        	var z=this.radius*Math.sin(sTheta*i)*Math.sin(sAlpha*j);
 		        	oDiv.innerHTML=this.input.substr((i)*(j),1);
-		        	console.log(x+"---"+y+"---"+z);
+		        	// console.log(x+"---"+y+"---"+z);
 					oDiv.style.transform="translate3d(" + x + "px," + y + "px," + z + "px) rotateY("+(90-single*j)+"deg)";
 					frag.appendChild(oDiv);
 		        }

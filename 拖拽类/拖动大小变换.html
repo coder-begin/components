@@ -12,15 +12,17 @@
 				position: absolute;
 				left: 200px;
 				top: 200px;
+				border: 2px solid #000;
 			}
 		</style>
 	</head>
 
 	<body>
+			<div style="position: absolute;">拖动小方块的上下左右边框小方块会随着变化</div>
+	
 		<div id="box">
-
 		</div>
-
+		
 		<script type="text/javascript">
 			
 			
@@ -108,7 +110,6 @@
 
 						document.onmousemove = document.onmouseup = null;
 						if(_this.elem.releaseCapture) {
-
 							_this.elem.releaseCapture();
 						}
 
