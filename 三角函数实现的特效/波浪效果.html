@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>
+        波浪效果
+    </title>
+    <style type="text/css">
+    #canvas {
+
+        border: 1px solid #000;
+    }
+
+    .box {
+        width: 500px;
+        height: 500px;
+        margin: 0 auto;
+    }
+    </style>
+</head>
+
+<body>
+    <div class="box">
+        <canvas id="canvas" width="500" height="500"></canvas>
+    </div>
+    <input type="button" id="btn" value="click">
+    <script type="text/javascript">
+    var oCanvas = document.getElementById("canvas");
+    var oBtn = document.getElementById("btn");
+    var bTime = new Date().getTime();
+    var isBegin = false;
+    var timer = null;
+    var time=1;
+    function draw(posX, posY) {
+        if (oCanvas.getContext) {
+            var ctx = oCanvas.getContext("2d");
+            ctx.beginPath();
+            ctx.arc(posX, posY + 200, 2, 0, Math.PI * 2, false);
+            ctx.fill();
+        }
+    }
+   
+    oBtn.onclick=function(){
+    	
+    	isBegin=!isBegin;
+	 	clearInterval(timer);
+	    timer = setInterval(function() {
+	        if (isBegin) {
+	            var poX = Math.floor((new Date().getTime() - bTime) / 30);
+	            if(poX>time*500){
+	            	time++;
+	            }
+	            poX=poX-(time-1)*500;
+	            console.log(poX);
+	            draw(poX, 40 * Math.sin(poX * Math.PI /50));
+	           
+	        } else {
+	        	clearInterval(timer);
+				
+	        }
+	    }, 30);
+    }
+
+    </script>
+</body>
+
+</html>

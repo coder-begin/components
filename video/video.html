@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>视频播放器插件</title>
+    <style type="text/css">
+    #video {}
+
+    .box {
+        width: 500px;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .box:hover>.v_control {
+
+
+        bottom: 0px;
+    }
+
+    .v_control {
+        width: 100%;
+
+        background-color: rgba(0, 0, 0, 0.8);
+        position: absolute;
+        bottom: -40px;
+        left: 0;
+
+        transition: bottom 0.2s;
+    }
+
+    .v_control>.proFrame {
+        width: 100%;
+        background-color: rgba(255, 255, 255, 0.3);
+        z-index: 10;
+        cursor: pointer;
+    }
+
+
+    .v_control .proCurrent {
+        width: 50%;
+        height: 6px;
+        background-color: rgba(255, 255, 255, 0.6);
+    }
+
+    .v_control .pBtnGroup {
+        width: 100%;
+        float: left;
+        font-size: 10px;
+        height: 35px;
+        line-height: 35px;
+        color: rgba(255, 255, 255, 0.6);
+    }
+
+    .v_control .btnPlay {
+        width: 20px;
+        height: 20px;
+        background: url('./btnGroup.png') no-repeat center center;
+        background-position: -2px -38px;
+        margin: 6.5px 10px;
+        cursor: pointer;
+    }
+
+    #voice {
+        width: 17px;
+        height: 15px;
+        background: url('./voice.png') no-repeat center center;
+        display: inline-block;
+        margin: 10px 3px 10px 0;
+        cursor: pointer;
+    }
+
+    .voice_proF {
+        width: 60px;
+        height: 5px;
+        border-radius: 2px;
+        background-color: rgba(255, 255, 255, 0.3);
+        display: inline-block;
+        margin: 15px 0;
+        position: relative;
+    }
+
+    #voice_pro {
+        width: 8px;
+        height: 8px;
+        border-radius: 4px;
+        background-color: #fff;
+        top: -1.5px;
+        position: absolute;
+        cursor: pointer;
+    }
+
+    #fullScreen {
+
+        width: 20px;
+        height: 20px;
+        display: inline-block;
+        margin: 7.5px 10px;
+        background: url('./fullscreen.png') no-repeat center center;
+        cursor: pointer;
+    }
+
+    .fl {
+        float: left;
+    }
+
+    .fr {
+        float: right;
+    }
+
+    .clear {
+        zoom: 1;
+    }
+
+    .clear:after {
+        content: "";
+        display: block;
+        clear: both;
+    }
+    </style>
+</head>
+
+<body>
+    <div class="box" id="box">
+        <video id="video" width="500">
+            <source src="videoTest2.mp4" type="video/mp4 " /> 不支持
+        </video>
+        <div class="v_control" id="control">
+            <div class="proFrame" id="progress">
+                <div class="proCurrent"></div>
+            </div>
+            <div class="pBtnGroup clear ">
+                <i class="btnPlay fl " id="play"></i>
+                <div class="fl play_time ">
+                    <span id="currentTime">00:00:00</span>
+                    <span>/</span>
+                    <span id="allTime">00:00:00</span>
+                </div>
+                <div class="fr">
+                    <i id="voice"></i>
+                    <div class="voice_proF">
+                        <span id="voice_pro"></span>
+                    </div>
+                    <i id="fullScreen"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script type="text/javascript">
+    var playElem = document.getElementById("video");
+    var playBtn = document.getElementById("play");
+    var currentTime = document.getElementById("currentTime");
+    var allTime = document.getElementById("allTime");
+    var progress = document.getElementById("progress");
+    var control = document.getElementById("control");
+    var oBox = document.getElementById("box");
+    var oVoice = document.getElementById("voice");
+    var oVPro = document.getElementById("voice_pro");
+    var ofunnS = document.getElementById("fullScreen");
+
+    function VideoPlayer(playElem, playBtn, currentTime, allTime, progress, control) {
+
+        this.pElem = playElem;
+        this.pBtnElem = playBtn;
+        this.cTimeElem = currentTime;
+        this.aTimeElem = allTime;
+        this.proElem = progress;
+        this.ctrElem = control;
+        this.playTimer = null;
+        this.isNVoice = false;
+        this.playerSize = [playElem.offsetWidth, playElem.offsetHeight];
+
+    }
+    VideoPlayer.prototype.play = function() {
+        var _this = this;
+
+        if (_this.pElem.paused) {
+            _this.pElem.play();
+            this.showTime();
+
+        } else {
+            _this.pElem.pause();
+            clearInterval(_this.playTimer);
+
+        }
+
+
+
+    };
+    VideoPlayer.prototype.showTime = function() {
+        var _this = this;
+        var allTime;
+        setTimeout(function() {
+            allTime = VideoPlayer.getCTime(_this.pElem.duration);
+            _this.aTimeElem.innerHTML = allTime;
+        }, 100);
+        clearInterval(_this.playTimer);
+        _this.playTimer = setInterval(function() {
+            var cTime = _this.pElem.currentTime;
+            var time = VideoPlayer.getCTime(cTime);
+            if (time < allTime) {
+                _this.cTimeElem.innerHTML = time;
+                _this.proElem.children[0].style.width = cTime / _this.pElem.duration * oBox.offsetWidth + "px";
+            } else {
+                clearInterval(_this.playTimer);
+            }
+        }, 200);
+    };
+    VideoPlayer.prototype.showProgress = function(pos) {
+
+        var cTime = this.pElem.currentTime;
+        var proL = this.proElem.offsetWidth;
+
+
+        if (pos !== undefined) {
+            var scale = pos / proL;
+            this.pElem.currentTime = this.pElem.duration * scale;
+            var showCTime = VideoPlayer.getCTime(this.pElem.duration * scale);
+            this.cTimeElem.innerHTML = showCTime;
+            this.proElem.children[0].style.width = pos + "px";
+        }
+
+
+    }
+    VideoPlayer.prototype.showControl = function() {
+
+        var _this = this;
+
+        VideoPlayer.animate(_this.ctrElem, { bottom: 0 }, 200);
+
+    }
+
+    VideoPlayer.prototype.init = function() {
+        var _this = this;
+        var This = this;
+
+        var cVocie = oVPro.offsetLeft;;
+        var isFullS = false;
+
+        this.pElem.volume = 0.5;
+        oVPro.style.left = oVPro.parentNode.offsetWidth / 2 + "px";
+
+
+        this.pBtnElem.onclick = function() {
+            _this.play();
+
+        };
+
+
+
+        _this.proElem.onmouseenter = function(ev) {
+            var ev = ev || window.event;
+
+            VideoPlayer.animate(this.children[0], { height: 12 }, 150);
+            ev.stopPropagation();
+
+        }
+        _this.proElem.onmouseleave = function(ev) {
+            var ev = ev || window.event;
+            VideoPlayer.animate(this.children[0], { height: 6 }, 150);
+            ev.stopPropagation();
+
+        }
+        _this.proElem.onclick = function(ev) {
+
+            var ev = ev || window.event;
+            _this.showProgress(ev.clientX - oBox.offsetLeft);
+
+        }
+        oVoice.onclick = function() {
+            if (!_this.isNVoice) {
+                _this.pElem.volume = 0.0;
+                cVocie = oVPro.offsetLeft;
+                 console.log(oVPro.offsetLeft);
+                oVPro.style.left = 0 + "px";
+                _this.isNVoice = true;
+
+            } else {
+                console.log(cVocie);
+
+                oVPro.style.left = cVocie + "px";
+                _this.pElem.volume = cVocie / oVPro.parentNode.offsetWidth;
+                _this.isNVoice = false;
+            }
+
+        }
+        oVPro.onmousedown = function(ev) {
+            var ev = ev || window.event;
+
+            var _this = this;
+            var fDis = this.parentNode.offsetLeft + oBox.offsetLeft,
+                disX = ev.clientX - this.offsetLeft - fDis;
+            document.onmousemove = function(ev) {
+                var ev = ev || window.event;
+                var nVocie = oVPro.offsetLeft / oVPro.parentNode.offsetWidth;
+                // cVocie=oVPro.offsetLeft;
+                if (nVocie >=0 && nVocie <= 1) {
+                    This.pElem.volume = nVocie;
+                }
+               
+
+                _this.style.left = ev.clientX - fDis - disX + "px";
+
+            }
+
+            document.onmouseup = function() {
+                document.onmousemove = document.onmouseup = null;
+                This.isNVoice = _this.offsetLeft > 0 ? false : true;
+            }
+
+            return false;
+
+        }
+
+        ofunnS.onclick = function() {
+            var W = document.documentElement.clientWidth,
+                H = document.documentElement.clientHeight;
+            if (!isFullS) {
+                isFullS = true;
+                _this.pElem.style.width = W + "px";
+                _this.pElem.style.height = H + "px";
+                oBox.style.width = W + "px";
+            } else {
+                _this.pElem.style.width = _this.playerSize[0] + "px";
+                _this.pElem.style.height = _this.playerSize[1] + "px";
+                oBox.style.width = _this.playerSize[0] + "px";
+                isFullS = false;
+            }
+
+        }
+        window.onresize = function() {
+            if(isFullS){
+                var W = document.documentElement.clientWidth,
+                H = document.documentElement.clientHeight;
+             _this.pElem.style.width = W + "px";
+                _this.pElem.style.height = H + "px";
+                oBox.style.width = W + "px";
+            }
+            
+
+
+        }
+
+
+    }
+
+
+    VideoPlayer.getCTime = function(timeSec) {
+        var hour, min, sec, rT;
+        hour = Math.floor(timeSec / 3600);
+        rT = timeSec - hour * timeSec;
+        min = Math.floor(rT / 60);
+        rT = rT - min * 60;
+        sec = Math.floor(rT);
+        if (hour < 10) {
+            hour = "0" + hour;
+        }
+        if (min < 10) {
+            min = "0" + min;
+        }
+        if (sec < 10) {
+            sec = "0" + sec;
+        }
+        return hour + ":" + min + ":" + sec;
+    }
+    VideoPlayer.animate = function(elem, styles, time) {
+        var timer,
+            beginStyle = {};
+
+        for (var attr in styles) {
+            beginStyle[attr] = parseFloat(getStyle(elem, attr));
+        }
+
+        clearInterval(timer);
+        var bTime = new Date().getTime();
+        timer = setInterval(function() {
+
+            var cTime = Math.min(new Date().getTime() - bTime, time);
+
+            for (var attr in styles) {
+
+                var cStyle = linear(cTime, beginStyle[attr], styles[attr] - beginStyle[attr], time);
+
+                if (attr == "opacity") {
+
+                    elem.style.opacity = cStyle;
+                    elem.style.filter = "alpha(opacity=" + cStyle * 100 + ")";
+
+                } else {
+
+                    elem.style[attr] = cStyle + "px";
+                }
+
+            }
+
+            if (cTime >= time) {
+                clearInterval(timer);
+            }
+
+
+        }, 30)
+
+        var linear = function(t, b, c, d) {
+            return c * t / d + b;
+        }
+
+
+
+
+        function getStyle(elem, style) {
+
+
+            return elem.currentStyle ? elem.currentStyle[style] : window.getComputedStyle(elem, false)[style];
+
+
+        }
+
+
+    }
+
+
+
+    new VideoPlayer(playElem, playBtn, currentTime, allTime, progress, control).init();
+    </script>
+</body>
+
+</html>

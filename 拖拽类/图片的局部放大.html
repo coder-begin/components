@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>图片的局部放大</title>
+		<script src="Drag.js" type="text/javascript" charset="utf-8"></script>
+		<style type="text/css">
+			#box {
+				width: 192px;
+				height: 120px;
+				
+				background: url("./test.jpg") no-repeat center center;
+				background-size: 100% 100%;
+				position: relative;
+			}
+			
+			#mask {
+				width: 30px;
+				height: 30px;
+				background-color: rgba(0, 0, 0, 0.5);
+				position: absolute;
+				cursor: pointer;
+			}
+			
+			#show {
+				border: 1px solid #000;
+				display: none;
+				background: url("./test.jpg") no-repeat;
+			}
+		</style>
+
+	</head>
+
+	<body>
+		<div id="box">
+			<div id="mask"></div>
+
+		</div>
+		<div id="show">
+
+		</div>
+
+		<script type="text/javascript">
+			var oBox = document.getElementById("box");
+			var oMask = document.getElementById("mask");
+			var oShow = document.getElementById("show");
+			var imgInfo = [1920, 1200, "./test.jpg"];
+
+			function DragEnlarge(elem, parent, showElem) {
+				Drag.call(this, elem, parent);
+				this.sElem = showElem;
+				this.scale = 0;
+			}
+
+			Drag.extend(DragEnlarge.prototype, Drag.prototype);
+			DragEnlarge.prototype.mouseMove = function(ev) {
+				var L = ev.clientX - this.disX;
+				var T = ev.clientY - this.disY;
+				var pWidth = this.rElem.offsetWidth,
+					pHeight = this.rElem.offsetHeight,
+					mWidth = this.elem.offsetWidth,
+					mHeight = this.elem.offsetHeight;
+				if(L < 0) {
+					L = 0;
+				} else if(L > pWidth - mWidth) {
+					L = pWidth - mWidth;
+				}
+				if(T < 0) {
+					T = 0;
+				} else if(T > pHeight - mHeight) {
+
+					T = pHeight - mHeight;
+				}
+				this.elem.style.left = L + "px";
+				this.elem.style.top = T + "px";
+				this.showLargePic([L, T]);
+
+			}
+
+			DragEnlarge.prototype.mouseDown = function(ev) {
+
+				var _this = this;
+				_this.disX = ev.clientX - this.elem.offsetLeft;
+				_this.disY = ev.clientY - this.elem.offsetTop;
+
+				if(_this.setCapture) {
+					_this.elem.setCapture();
+				}
+
+				document.onmousemove = function(ev) {
+					var ev = ev || window.event;
+					_this.mouseMove(ev)
+				}
+				document.onmouseup = function() {
+					_this.mouseUp();
+				}
+
+
+			}
+			DragEnlarge.prototype.showLargePic = function(posArr) {
+
+				var scale = this.scale;
+				var showW = this.elem.offsetWidth * scale,
+					showH = this.elem.offsetHeight * scale;
+
+				this.sElem.style.backgroundPosition = (-posArr[0] * scale + "px") + "  " + (-posArr[1] * scale + "px");
+
+			}
+			DragEnlarge.prototype.mouseOver = function() {
+				this.scale = imgInfo[0] / this.rElem.offsetWidth;
+				this.sElem.style.display = "block";
+				this.sElem.style.width = this.elem.offsetWidth * this.scale + "px";
+				this.sElem.style.height = this.elem.offsetHeight * this.scale + "px";
+
+			}
+			DragEnlarge.prototype.init = function() {
+				var _this = this;
+
+				_this.elem.onmousedown = function(ev) {
+					var ev = ev || window.event;
+					_this.mouseDown(ev);
+					return false;
+				}
+				_this.rElem.onmouseover=function(){
+					
+					_this.mouseOver();
+					
+				}
+				_this.rElem.onmouseout=function(){
+					_this.sElem.style.display = "none";
+				}
+				
+			}
+
+			var drag = new DragEnlarge(oMask, oBox, oShow).init();
+		</script>
+
+	</body>
+
+</html>

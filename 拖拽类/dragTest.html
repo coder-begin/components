@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>拖拽测试</title>
+		<style type="text/css">
+			#box{
+				width: 500px;
+				height: 500px;
+				margin: 50px auto;
+				background-color: green;
+				position: relative;
+			}
+			
+			#move{
+				width: 50px;
+				height: 50px;
+
+				background-color: yellow;
+				position: absolute;
+			}
+		</style>
+		<script src="Drag.js" type="text/javascript" charset="utf-8"></script>
+	</head>
+	<body>
+		<div id="box">
+			<div id="move">
+				
+			</div>
+			
+		</div>
+		
+		
+		<script type="text/javascript">
+			var oBox=document.getElementById("box");
+			var oMove=document.getElementById("move");
+			
+			var drag=new Drag(oMove,oBox);
+				drag.init();
+			
+			
+		</script>
+		
+	</body>
+</html>

@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <!-- 注意事项:必须按照以下布局,只需要父元素box传入，样式设计 -->
+    <meta charset="UTF-8">
+    <title>模拟滚动条</title>
+    <style type="text/css">
+    .box {
+        width: 500px;
+        height: 600px;
+        overflow: hidden;
+        border: 1px solid #000;
+
+        position: relative;
+    }
+
+
+
+    .content {
+        position: absolute;
+        left: 0;
+        background-color: yellow;
+    }
+
+    .scrollFrame {
+        width: 15px;
+        height: 100%;
+        background-color: skyblue;
+        position: absolute;
+        right: 0;
+    }
+
+    .scrollBar {
+        width: 100%;
+       
+        background-color: green;
+        position: absolute;
+        top: 0;
+        left: 0;
+    }
+
+    ul {
+        padding: 0;
+        margin: 0;
+    }
+
+    li {
+        list-style: none;
+        width: 100px;
+				height: 30px;
+        border: 1px solid #666;
+        text-align: center;
+        /*line-height:50px;*/
+    }
+    </style>
+</head>
+
+<body>
+    <div class="box" id="box">
+        <div class="content">
+            <ul>
+                <li>1</li>
+                <li>2</li>
+                <li>3</li>
+                <li>4</li>
+                <li>5</li>
+                <li>6</li>
+                <li>7</li>
+                <li>8</li>
+                <li>9</li>
+                <li>10</li>
+                <li>11</li>
+                <li>12</li>
+                <li>13</li>
+                <li>14</li>
+            </ul>
+        </div>
+        <div class="scrollFrame">
+            <div class="scrollBar"></div>
+        </div>
+    </div>
+    <script type="text/javascript">
+    function scrollBox(boxElem) {
+        this.boxElem = boxElem;
+
+    }
+    scrollBox.canmove = false;
+    scrollBox.prototype.setConW = function() {
+        //设置内容宽度
+        var children = this.boxElem.children;
+        var boxW = this.boxElem.offsetWidth;
+        children[0].style.width = boxW - children[1].offsetWidth + "px";
+
+    }
+    scrollBox.prototype.setElem=function(elem) {
+    	this.boxElem=elem;
+    }
+    //初始化拖动滚动
+    scrollBox.prototype.initScrollBar = function() {
+        var _this = this;
+        var scrollFrame = this.boxElem.children[1]; //滚动框
+        var contentElem = this.boxElem.children[0]; //内容
+        var scrollElem = scrollFrame.children[0]; //滚动条
+        this.boxElem.style.height=document.documentElement.clientHeight+"px";
+        scrollElem.style.height=this.boxElem.offsetHeight/contentElem.offsetHeight*scrollFrame.offsetHeight+"px";
+        if (_this.boxElem.offsetHeight > contentElem.offsetHeight) {
+            scrollBox.canmove = false;
+            scrollFrame.style.display = "none";
+        }
+        //ie设置全局捕获
+        if (scrollElem.setCapture) {
+            scrollElem.setCapture();
+        }
+
+        scrollElem.onmousedown = function(ev) {
+            var ev = ev || window.event;
+            var disY = ev.clientY - this.offsetTop; //鼠标相对于滚动条位移
+            var elemH = scrollElem.offsetHeight, //滚动条高度
+                scrollFH = scrollFrame.offsetHeight, //滚动框高度
+                contentH = contentElem.offsetHeight; //内容高度
+            //滚动条和内容可滚动区域的比值
+            var scale = (contentH - _this.boxElem.offsetHeight) / (scrollFH - elemH);
+
+
+            document.onmousemove = function(ev) {
+                var ev = ev || window.event;
+                var currentY = ev.clientY - disY;
+
+                //判断拖动滚动边界条件
+                if (currentY < 0) {
+                    currentY = 0;
+                }
+                if (currentY > scrollFH - elemH) {
+                    currentY = scrollFH - elemH;
+                }
+
+                //设置拖动滚动
+                scrollElem.style.top = currentY + "px";
+                contentElem.style.marginTop = -(currentY * scale) + "px";
+            }
+
+
+            //
+            document.onmouseup = function(ev) {
+                //清除拖动事件
+                document.onmousemove = document.onmouseup = null;
+
+                //ie释放全局捕获
+                if (scrollElem.releaseCapture) {
+                    scrollElem.releaseCapture();
+                }
+
+            }
+
+
+            return false;
+        }
+
+    }
+
+    //初始化滚动事件
+    scrollBox.prototype.scrollChange = function() {
+        var _this = this;
+
+        var oContent = _this.boxElem.children[0], //内容
+            oScrollBar = _this.boxElem.children[1].children[0], //滚动条
+            canMoveDis = _this.boxElem.children[1].offsetHeight - oScrollBar.offsetHeight, //滚动条可滚动区域
+            contentH = oContent.offsetHeight, //内容高度
+            contentCanMove = contentH - _this.boxElem.offsetHeight, //内容可滚动区域
+            //滚动条和内容可滚动区域比值
+            scale = contentCanMove / canMoveDis;
+        var eWhellDis = 5; //每次滚动距离
+
+
+        function whell(ev) {
+            if (scrollBox.canmove) {
+                var ev = ev || window.event;
+                var contentTop = parseFloat(scrollBox.getStyle(oContent, "marginTop").replace("px", "")); //内容区域marginTop
+                var scrollBarTop = oScrollBar.offsetTop; //滚动条离上边界的距离
+                var contentMDis, scrollBarMDis; //滚动条和内容滚动后离上边界的距离
+
+
+
+                var dirFlag = true; //true代表向上滚动
+
+                if (ev.wheelDelta) {
+                    dirFlag = ev.wheelDelta > 0 ? true : false;
+                } else {
+                    //火狐的滚轮方向
+                    dirFlag = ev.detail < 0 ? true : false;
+                }
+
+                //兼容火狐的阻止默认行为
+                if (_this.boxElem.addEventListener) {
+                    ev.preventDefault();
+                }
+
+
+                if (dirFlag) {
+
+                    //向上滚动
+                    contentMDis = contentTop + eWhellDis * scale;
+                    scrollBarMDi = scrollBarTop - eWhellDis;
+                    if (scrollBarMDi < 0) {
+                        scrollBarMDi = 0;
+                        contentMDis = 0;
+                    }
+                } else {
+
+                    //向下滚动
+                    contentMDis = -eWhellDis * scale + contentTop
+                    scrollBarMDi = scrollBarTop + eWhellDis
+                    if (scrollBarMDi > canMoveDis) {
+                        scrollBarMDi = canMoveDis;
+                        contentMDis = -contentCanMove;
+                    }
+
+                }
+                oContent.style.marginTop = contentMDis + "px";
+
+                oScrollBar.style.top = scrollBarMDi + "px";
+
+                return false;
+
+            }
+        }
+
+        this.boxElem.onmousewheel = whell;
+        if (this.boxElem.addEventListener) {
+            //兼容火狐
+            this.boxElem.addEventListener("DOMMouseWhell", whell, false);
+        }
+
+    }
+    scrollBox.prototype.init = function() {
+
+        this.setConW();
+        this.initScrollBar();
+        this.scrollChange();
+
+    }
+
+    //工具方法，获取样式(在非内嵌样式下无法使用elem.style来获取样式)
+    scrollBox.getStyle = function(oElem, styleName) {
+
+
+        return window.getComputedStyle ? window.getComputedStyle(oElem, null)[styleName] : oElem.currentStyle[styleName];
+
+
+    }
+    var oBox = document.getElementById("box");
+
+    var scroll = new scrollBox(oBox);
+    scroll.init();
+    window.addEventListener("resize", function() {
+        oBox.style.height = document.documentElement.clientHeight + "px";
+        scroll=new scrollBox(oBox).init();
+        if (oBox.offsetHeight < oBox.children[0].offsetHeight) {
+            scrollBox.canmove = true;
+            oBox.children[1].style.display = "block";
+        }
+    }, false);
+    </script>
+</body>
+
+</html>

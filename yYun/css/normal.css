@@ -1,0 +1,169 @@
+html,body,ul,ol,p,li{margin: 0;padding: 0;}
+body{
+	overflow: hidden;
+}
+ul{list-style: none;}
+img{border: 0;}
+a{text-decoration: none;color: #fff}
+input[type=file]{
+	opacity: 0;
+	position: absolute;
+	height: 33px;
+	top: 0;
+	left: 0;
+	left: -150px;
+	cursor: pointer;
+}
+.btnClose{
+	cursor: pointer;
+	width: 12px;
+	height: 12px;
+	text-align: center;
+	line-height: 12px;
+	margin: 16px 0;	
+	background-color:skyblue;
+}
+input[type=button]{
+	cursor: pointer;
+}
+
+.fl{
+	float: left;
+}
+.fr{
+	float: right;
+}
+.clear{
+	zoom: 1;	
+}
+.clear:after{
+	content: "";
+	display: block;
+	clear: both;
+}
+
+.mask{
+	width: 100%;
+	height: 100%;
+	background-color: rgba(0,0,0,0.5);
+	position: fixed;
+	z-index: 100;
+	display: none;
+}
+.maskContent{
+	position: absolute;
+	background-color: #fff;
+	border-radius: 8px;
+	top:50%;left:50%;
+}
+.maskCTop{
+	height:44px;
+	border-bottom:1px solid #C4DBFE;
+	width:100%;
+	line-height: 44px;
+	font-size: 14px;
+	color: #696A6A;
+	padding: 0 14px;
+	box-sizing: border-box;
+}
+.w60{
+	width: 60%;
+	height: 100%;
+}
+.w15{
+	width: 15%;
+	height: 100%;
+}
+.w25{
+	width: 25%;
+	height: 100%;
+}
+.checkbox{
+	width: 12px;
+	height: 12px;
+	border: 1px solid #D0D9E4;
+	background-color: #fff;
+	margin: 0;
+	padding: 0;
+}
+.verC{
+	vertical-align: middle;
+	margin-right: 12px;
+}
+
+input[type=checkbox]{
+	margin: 0;
+	padding: 0;
+	vertical-align: middle;
+}
+.folder{
+	width: 26px;
+	height: 21px;
+	display: inline-block;
+	background:url("../src/img/folder.png") no-repeat center center;
+	vertical-align: middle;
+	margin:0 10px;
+}
+.doc{
+	width: 21px;
+	height: 24px;
+	display: inline-block;
+	background:url("../src/img/doc.png") no-repeat center center;
+	vertical-align: middle;
+	margin:0 10px;
+}
+.other{
+	width: 21px;
+	height: 24px;
+	display: inline-block;
+	background:url("../src/img/other.png") no-repeat center center;
+	vertical-align: middle;
+	margin:0 10px;
+}
+.rar{
+	width: 20px;
+	height: 19px;
+	display: inline-block;
+	background:url("../src/img/rar.png") no-repeat center center;
+	vertical-align: middle;
+	margin:0 10px;
+}
+
+.video{
+	width: 21px;
+	height: 24px;
+	display: inline-block;
+	background:url("../src/img/video.png") no-repeat center center;
+	vertical-align: middle;
+	margin:0 10px;
+}
+
+.bt{
+	width: 21px;
+	height: 24px;
+	display: inline-block;
+	background:url("../src/img/bt.png") no-repeat center center;
+	vertical-align: middle;
+	margin:0 10px;
+}
+
+.btnSmall{
+	width: 22px;
+	height: 21px;
+	background-color: #555;
+	margin:11px 0 11px 2px;
+	border: 0;
+	outline: none;
+	vertical-align: middle;
+}
+.newFolderText{
+	height: 26px;
+	border: 1px solid rgba(0,0,0,0.5);
+	margin: 3.5px 0;
+}
+.btnOk{
+	background: url('../src/img/btnOk.png') no-repeat center center;
+}
+.btnClose{
+	background: url('../src/img/btnClose.png') no-repeat center center;
+}

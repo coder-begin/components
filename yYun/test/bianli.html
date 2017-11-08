@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title></title>
+    <meta charset="utf-8">
+    <script type="text/javascript" src="../infos.js"></script>
+</head>
+
+<body>
+    <script type="text/javascript">
+    // console.log(fileDir);
+    var data=null;
+    function ergodic(cArr, pathArr, index) {
+        for (var i = 0; i < cArr.length; i++) {
+            if (cArr[i].fileName == pathArr[index]) {
+                if(index==pathArr.length-1){
+                   data=cArr[i].children;
+                }
+                ergodic(cArr[i].children,pathArr,++index);
+            }
+        }
+    }
+
+   ergodic(fileDir, ["前端学习", "RejectJS国语", "RejectJS路由"],0);
+   console.log(data);
+    // var hash="/";
+
+    // var hashs=hash.split("/")
+    // var hashArr=[];
+    // for(var i=0;i<hashs.length;i++){
+    //  if(hashs[i]!==""){
+    //      hashArr.push(hashs[i]);
+    //  }
+    // }
+    //  console.log(hashArr.length);
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title></title>
+</head>
+
+<body>
+    <script type="text/javascript">
+    var STATUS = {
+        PENDING: 0,
+        FULFILLED: 1,
+        REJECTED: 2
+    }
+
+    function Promise(executor) {
+        this._status = STATUS.PENDING;
+        this._data = undefined;
+        this.fulFilledCallBack = [];
+        this.rejectedCallBack = [];
+        this.nextPromise=null;
+        this.rejectFlag=false;//表示有没有被reject,因为只能reject一次,下次的回调就不会被执行
+       	var _this=this;
+
+        try {
+        	//指定this，要不然在then返回的promise中就没法设置状态
+            executor.call(_this,function(data) {
+            	//这就是resolve中的一部分提出来的
+                if (_this._status != STATUS.PENDING) {
+                    return; //如果开始运行的时候状态不是PENDING直接跳出,执行下次的Promise
+                }
+
+                _this._data = data;
+                _this._status = STATUS.FULFILLED;
+                //在fulfill后的回调函数指向
+               Promise.doCallBack(_this,true,_this.nextPromise);
+
+            }, function(data) {
+            	if (_this._status != STATUS.PENDING) {
+                    return; //如果开始运行的时候状态不是PENDING直接跳出,执行下次的Promise
+                }
+                _this._data = data;
+                _this._status = STATUS.REJECTED;
+               
+                 //在reject后的回调函数指向
+               Promise.doCallBack(_this,false,_this.nextPromise);
+                
+            })
+        } catch (e) {
+
+        	 _this._data = data;
+             _this._status = STATUS.REJECTED;
+       		console.log(e);
+        }
+
+    }
+    Promise.prototype.then=function(onFulfilled,onRejected){
+    	
+    	var _this=this,
+    		newPromise;
+
+    	if(_this._status==STATUS.PENDING){
+    		_this.fulFilledCallBack.push(onFulfilled);
+    		_this.rejectedCallBack.push(onRejected);
+    	}
+
+    	newPromise=new Promise(function(resolve,reject) {});
+    	_this.nextPromise=newPromise;
+    	return newPromise;
+    }
+    //处理多次调用的回调函数
+   	Promise.doCallBack=function(promise,flag,newPromise){
+   		if(flag){
+   			//这是在fulfilled后的函数回调(这是一个promise可以被多次调用的关键)
+   			promise.fulFilledCallBack.forEach(function(fn){
+   				setTimeout(function(){
+   					//判定是不是函数,不是就忽略
+   					if(Promise.tools.isFunction(fn)){
+   						try{
+   							var result=fn(promise._data);
+   							newPromise._status=promise._status; 
+   							newPromise.rejectFlag=promise.rejectFlag;
+   							Promise.resolve(newPromise,result);
+   						}catch(e){
+   							
+   							Promise.reject(newPromise,e);
+   						}
+   					}else{
+   						if(promise._status==STATUS.FULFILLED){
+   							Promise.resolve(newPromise,promise._data);
+   						}
+   					}
+
+
+   				},0)
+
+   			})
+
+   		}else{
+   			promise.rejectedCallBack.forEach(function(fn){
+   				setTimeout(function(){
+   					if(Promise.tools.isFunction(fn)){
+   						try{
+   							var result=fn(promise._data); 
+   							newPromise._status=promise._status;
+   							newPromise.rejectFlag=promise.rejectFlag;
+   							Promise.resolve(newPromise,result);
+   						}catch(e){
+   							Promise.reject(newPromise,e);
+   						}
+   					}else{
+   						if(promise._status==STATUS.REJECTED){
+   							Promise.resolve(newPromise,promise._data);
+   						}
+   					}
+   				},0)
+   			})
+   		}
+   		
+   	}
+   	//处理then返回的值(不论是什么样的结果只要不是报错走的都是resolve)
+   	Promise.resolve=function(promise,result){
+   		
+		if(result==undefined){
+			//没有返回值,就把返回值设置为undefined
+			promise._data=undefined;
+		}else if(result==promise){
+			//判定返回值不能等于上一个本身
+			Promise.reject(promise,"value==promise error");
+		}else if(result instanceof Promise){
+			//如果返回值是promise就把他的状态给现在的promise
+			promise._status=result._status;
+			promise._data=result._data;
+			promise.rejectFlag=result.rejectFlag;
+		}else{
+			//如果不是这上面几种就是直接当作参数进行调用
+			promise._data=result;
+		}
+
+		if(promise._status==STATUS.FULFILLED){
+			Promise.doCallBack(promise,true,promise.nextPromise);
+		}else if(promise._status==STATUS.REJECTED){
+			if(promise.rejectFlag==false){
+				Promise.doCallBack(promise,false,promise.nextPromise);
+				promise.rejectFlag=true;
+			}
+			
+		}
+
+   	}
+   	Promise.reject=function(promise,error){
+   		
+   		console.log(promise+"error"+error);
+
+   	}
+    Promise.tools = {
+        isFunction: function(arg) {
+            return Object.prototype.toString.call(arg) == "[object Function]" ? true : false;
+        },
+        likePromise: function(arg) {
+            if (arg.then != undefined) {
+                if (this.isFunction(arg.then)) {
+                    return true;
+                }
+            }
+            return false;
+        }
+    }
+
+
+
+    var promise = new Promise(function(resolve, reject) {
+
+        setTimeout(function() {
+            console.log("ok");
+            resolve("ok1");
+        }, 500);
+
+
+
+    })
+
+
+
+  //1.支持多次的调用(第一次的返回值和第二次没关系)
+  /*
+    promise.then(function(data) {
+    	console.log(data);
+    	return;
+    })
+    promise.then(function(data) {
+    	console.log(data);
+    	return;
+    })
+  */
+
+
+  //2.支持链式调用
+  //   promise.then(function(data) {
+  //   	//返回非promise，非对象，非函数
+  //       console.log(data);
+  //       return "sssssss";
+  //   },function(argument) {
+  //   	console.log(data);
+  //       return "error";
+  //   }).then(function(data){
+		// console.log(data);
+		
+  //   })
+    
+    promise.then(function(data) {
+        console.log(data);
+        return new Promise(function(resolve,reject) {
+            resolve("error");
+        })
+    }).then(function(data){
+         console.log(data);
+         return 22
+    },function(data) {
+        console.log(data);
+        return 22
+    }).then(function(data){
+     console.log(data);
+    },function(data) {
+        console.log(data);
+    })
+    
+    </script>
+</body>
+
+</html>

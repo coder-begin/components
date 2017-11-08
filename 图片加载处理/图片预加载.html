@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>图片预加载</title>
+	</head>
+	<body>
+		
+		<img id="img" src="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1508163676172&di=71a81b5e9fc7ce83c4dfb35d63004da3&imgtype=jpg&src=http%3A%2F%2Fimg2.imgtn.bdimg.com%2Fit%2Fu%3D3189158430%2C1996771512%26fm%3D214%26gp%3D0.jpg"/>
+		
+		<input type="button" name="btn" id="btn" value="preload" />
+		<script type="text/javascript">
+			
+			function imgPreload(src){
+				
+				var newImg=new Image();
+				
+				newImg.src=src;
+			}
+			
+			var oBtn=document.getElementById("btn");
+			var oImg=document.getElementById("img");
+//			imgPreload("https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1508163676172&di=71a81b5e9fc7ce83c4dfb35d63004da3&imgtype=jpg&src=http%3A%2F%2Fimg2.imgtn.bdimg.com%2Fit%2Fu%3D3189158430%2C1996771512%26fm%3D214%26gp%3D0.jpg")
+			oBtn.onclick=function(){
+				
+				oImg.src="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1508163676172&di=71a81b5e9fc7ce83c4dfb35d63004da3&imgtype=jpg&src=http%3A%2F%2Fimg2.imgtn.bdimg.com%2Fit%2Fu%3D3189158430%2C1996771512%26fm%3D214%26gp%3D0.jpg";
+				
+			}
+			
+			
+		</script>
+	</body>
+</html>

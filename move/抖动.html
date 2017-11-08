@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<style type="text/css">
+			#box {
+				width: 150px;
+				height: 180px;
+				background-color: red;
+				left: 0;
+				position: absolute;
+				margin: 20px 0px;
+				left: 20px;
+			}
+		</style>
+	</head>
+
+	<body>
+
+		<div id="box">
+
+		</div>
+		<input type="button" name="btn" id="btn" value="click" />
+		<script type="text/javascript">
+			var oBox = document.getElementById("box");
+			var oBtn=document.getElementById("btn");
+			
+			
+			oBtn.onclick=function(){
+				
+				//如果重复调用下面的会覆盖上面的
+				
+//				shake(oBox);
+//				shake(oBox,30);
+//				shake(oBox,30,1);
+				
+			}
+			
+			function shake(elem,sTimes,sRange) {
+				
+				var posArr = [];
+				var times = 0;
+				var left = elem.offsetLeft;
+				var marginL=parseFloat(getStyle(oBox,"marginLeft"));
+				
+				if(sTimes==undefined){
+					
+					sTimes=9;
+					sRange=2;
+				}
+				if(typeof sTimes =="number"&&sRange===undefined){
+					sRange=2;
+				}
+				
+				for(var i = sTimes; i > -1; i--) {
+
+					posArr.push(left + i * sRange-marginL);
+					posArr.push(left - i * sRange-marginL);
+
+				}
+				
+				setTimeout(function() {
+					elem.style.left = posArr[times] + "px";
+					times++;
+					if(times < posArr.length) {
+						setTimeout(arguments.callee, 13);
+					}
+
+				}, 13);
+
+			}
+		
+			function getStyle(elem, attr) {
+
+				return elem.currentStyle ? elem.currentStyle[attr] : window.getComputedStyle(elem, false)[attr];
+
+			}
+		</script>
+	</body>
+
+</html>

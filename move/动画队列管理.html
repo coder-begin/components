@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>test</title>
+	</head>
+
+	<body>
+
+		<script type="text/javascript">
+			var isGoing = false;
+			var queue = [showMsg, showMsg, showMsg, showMsg];
+
+			function showMsg(fn) {
+				var timer=null;
+				timer=setInterval(function() {
+					console.log("ssss")
+
+					isGoing = false;
+					clearInterval(timer);
+				}, 2000);
+
+			}
+			var timer=null;
+			var len = queue.length;
+			timer=setInterval(function() {
+				if(!isGoing) {
+					if(len > 0) {
+						len--;
+						isGoing = true;
+						queue.shift()();
+
+					}else{
+						clearInterval(timer);
+					}
+
+				}
+
+			}, 10)
+		</script>
+
+	</body>
+
+</html>

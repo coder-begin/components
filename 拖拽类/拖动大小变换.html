@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>拖动边界大小变换</title>
+		<style type="text/css">
+			#box {
+				width: 150px;
+				height: 150px;
+				background-color: blue;
+				position: absolute;
+				left: 200px;
+				top: 200px;
+			}
+		</style>
+	</head>
+
+	<body>
+		<div id="box">
+
+		</div>
+
+		<script type="text/javascript">
+			
+			
+			//注意点:position必须设置为absolute,否则无法使用top,left
+			function boxChange(elem) {
+
+				this.elem = elem;
+
+			}
+
+			boxChange.prototype.sizeChange = function(sideW) {
+				var _this = this;
+				if(this.elem.setCapture) {
+					this.elem.setCapture();
+				}
+
+				this.elem.onmousedown = function(ev) {
+					var ev = ev || window.event;
+					var downX = ev.clientX;
+					var downY = ev.clientY;
+					var elemDisX = this.offsetLeft,
+						elemW = this.offsetWidth,
+						elemDisY = this.offsetTop,
+						elemH = this.offsetHeight;
+					var dir = "";
+
+					if(downX > elemDisX + elemW - sideW && downX < elemDisX + elemW) {
+						dir = "right";
+					}
+					if(downX > elemDisX && downX < elemDisX + sideW) {
+						dir = "left";
+					}
+					
+					if(downY > elemDisY + elemH - sideW && downY < elemDisY + elemH) {
+						dir = "bottom";
+					}
+					if(downY > elemDisY && downY < elemDisY + sideW) {
+						dir = "top";
+					}
+
+					document.onmousemove = function(ev) {
+						var ev = ev || window.event;
+
+						switch(dir) {
+							case "right":
+								var currentW = elemW + (ev.clientX - downX);
+
+								if(currentW > 2 * sideW) {
+									_this.elem.style.width = currentW + "px";
+								}
+
+								break;
+							case "left":
+								var currentW = elemW - (ev.clientX - downX);
+								if(currentW > 2 * sideW) {
+									_this.elem.style.width = currentW + "px";
+									_this.elem.style.left = (elemDisX + (ev.clientX - downX)) + "px";
+
+								}
+
+								break;
+							case "top":
+								var currentH = elemH - (ev.clientY - downY);
+								if(currentH > 2 * sideW) {
+									_this.elem.style.height = currentH + "px";
+									_this.elem.style.top = (elemDisY + (ev.clientY - downY)) + "px";
+
+								}
+								
+								break;
+							case "bottom":
+							
+								var currentH = elemH + (ev.clientY - downY);
+
+								if(currentH > 2 * sideW) {
+									_this.elem.style.height = currentH + "px";
+								}
+								
+								break;
+
+						}
+
+					}
+					document.onmouseup = function() {
+
+						document.onmousemove = document.onmouseup = null;
+						if(_this.elem.releaseCapture) {
+
+							_this.elem.releaseCapture();
+						}
+
+					}
+
+					return false;
+				}
+
+			}
+			boxChange.prototype.init = function(sideW) {
+
+				this.sizeChange(sideW);
+
+			}
+
+			new boxChange(document.getElementById("box")).init(15);
+		</script>
+	</body>
+
+</html>

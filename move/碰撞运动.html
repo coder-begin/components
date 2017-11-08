@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>碰撞运动</title>
+		<style type="text/css">
+			#box{
+				width: 100px;
+				height: 100px;
+				background-color: blue;
+				position: absolute;
+			}
+		</style>
+	</head>
+	<body>
+		<div id="box"></div>
+		
+		<script type="text/javascript">
+			
+			
+			function collision(elem){
+				var iSpeedX=5,
+					iSpeedY=5,
+					timer=null,
+					wHeight=document.documentElement.clientHeight,
+					eHeight=elem.offsetHeight,
+					wWidth=document.documentElement.clientWidth,
+					eWidth=elem.offsetWidth;
+					
+				clearInterval(timer);
+				var timer=setInterval(function(){
+					var L=elem.offsetLeft+iSpeedX,
+						T=elem.offsetTop+iSpeedY;
+					
+					if(T>wHeight-eHeight){
+						iSpeedY*=-1;
+					}else if(T<0){
+						
+						iSpeedY*=-1;
+					}
+					if(L>wWidth-eWidth){
+						iSpeedX*=-1;
+						
+						
+					}else if(L<0){
+						iSpeedX*=-1;
+					}
+					
+				
+					
+					elem.style.left=L+"px";
+					elem.style.top=T+"px";
+					
+				},13);
+				
+				
+				
+			}
+			collision(document.getElementById("box"))
+			
+			
+			
+		</script>
+		
+	</body>
+</html>

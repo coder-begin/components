@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>3d转换</title>
+    <meta charset="utf-8">
+    <style type="text/css">
+    .box {
+        width: 800px;
+        height: 600px;
+        background-color: green;
+        perspective: 800px;
+        -webkit-perspective: 800px;
+      
+        margin: 50px auto;
+        overflow: hidden;
+        
+    }
+
+    ul {
+      	width: 800px;
+        height: 600px;
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        position: absolute;
+        transition: transform 2s;
+        transform-origin: center center center ;
+         transform-style: preserve-3d;
+        -webkit-transform-style: preserve-3d;
+    }
+
+    li {
+        margin: 0;
+        padding: 0;
+        position: absolute;
+        left: 50%;
+        height:50%;
+      
+    }
+
+    .box:hover ul{
+        transform: rotateY(180deg);
+    }
+    </style>
+</head>
+
+<body>
+    <div class="box">
+        <ul>
+            <li>圆</li>
+            <li>圆</li>
+            <li>圆</li>
+            <li>圆</li>
+            <li>圆</li>
+            <li>圆</li>
+            <li>圆</li>
+            <li>圆</li>
+            <li>圆</li>
+            <li>圆</li>
+            <li>圆</li>
+            <li>圆</li>
+            <li>圆</li>
+            <li>圆</li>
+            <li>圆</li>
+            <li>圆</li>
+            <li>圆</li>
+             <li>圆</li>
+            <li>圆</li>
+            <li>圆</li>
+            <li>圆</li>
+              <li>圆</li>
+            <li>圆</li>
+             <li>圆</li>
+            <li>圆</li>
+            <li>圆</li>
+            <li>圆</li>
+             <li>圆</li>
+              <li>圆</li>
+            <li>圆</li>
+             <li>圆</li>
+            <li>圆</li>
+            <li>圆</li>
+            <li>圆</li>
+             <li>圆</li>
+             <li>圆</li>
+            <li>圆</li>
+            <li>圆</li>
+            <li>圆</li>
+             <li>圆</li>
+             <li>圆</li>
+             <li>圆</li>
+            <li>圆</li>
+            <li>圆</li>
+            <li>圆</li>
+             <li>圆</li>
+            <li>圆</li>
+            <li>圆</li>
+            <li>圆</li>
+             <li>圆</li>
+             <li>圆</li>
+             <li>圆</li>
+            <li>圆</li>
+            <li>圆</li>
+            <li>圆</li>
+        </ul>
+    </div>
+    <script type="text/javascript">
+    var aLi = document.getElementsByTagName("li");
+    var liLen = aLi.length;
+    console.log(liLen);
+    var singleAngle = Math.PI * 2 / (liLen);
+    var single=360/liLen;
+    for (var i = 0; i < liLen; i++) {
+        var x = 250 * Math.sin(45*Math.PI/180) * Math.cos(singleAngle * i);
+        var z = 250 * Math.sin(45*Math.PI/180) * Math.sin(singleAngle * i);
+        var y = 250 * Math.cos(45*Math.PI/180);
+        aLi[i].style.transform = "translate3d(" + x + "px," + y + "px," + z + "px) rotateY("+(90-single*i)+"deg)";
+    }
+    </script>
+</body>
+
+</html>

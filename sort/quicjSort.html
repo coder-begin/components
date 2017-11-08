@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>快速排序</title>
+	</head>
+	<body>
+		
+		
+		
+		<script type="text/javascript">
+			var arr=[5,8,9,12,1,6,36,98,45,21];
+			function quickSort(arr){
+				
+				if(arr.length<=1){
+					
+					return arr;
+					
+				}
+				
+				var middleNum=Math.floor(arr.length/2);
+				var middleValue=arr[middleNum];
+				var leftArr=[],rightArr=[];
+				for(var i=0,j=arr.length;i<j;i++){
+					if(arr[i]<middleValue){
+					
+						leftArr.push(arr[i]);
+						
+					}else if(arr[i]>middleValue){
+						
+						rightArr.push(arr[i]);
+						
+					}
+					
+				}
+				
+				
+				return arguments.callee.call(this,leftArr).concat([middleValue],arguments.callee.call(this,rightArr));
+				
+				
+				
+			}
+			
+			
+			console.log(quickSort(arr))
+			
+		</script>
+	</body>
+</html>

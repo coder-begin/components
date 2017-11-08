@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+</head>
+<body>
+
+
+<script type="text/javascript">
+	
+
+	// function getXHR(){
+	// 	if(typeof XMLHttpRequest !=undefined){
+	// 		return new XMLHttpRequest();
+
+	// 	}else if(typeof ActiveXObject !=undefined){
+	// 		var type=["MSXML2.XMLHttp.6.0","MSXML2.XMLHttp.3.0","MSXML2.XMLHttp"];
+	// 		for(var i=0;i<type.length;i++){
+	// 			try{
+	// 				new ActiveXObject(type[i]);
+	// 				getXHR.ver=type[i];
+	// 				break;
+	// 			}catch(e){
+
+	// 			}
+	// 		}
+	// 		return new ActiveXObject(getXHR.ver);
+	// 	}
+
+	// }
+
+	// var xhr=getXHR();
+	var addr="http://www.wookmark.com/api/json/popular?callback=showMsg&page=5";
+	// xhr.onreadystatechange=function(){
+	// 	if(xhr.readyState==4){
+	// 		if(xhr.status>=200&&xhr.status<300||xhr.status==304){
+	// 			console.log(xhr.responseText);
+	// 		}
+	// 	}
+
+	// }
+	// xhr.open("get",addr,false);
+
+	// xhr.send();
+	var allData;
+	function showMsg(data){
+		allData=data;
+	}
+	function Jsonp(addr){
+		var oScript=document.createElement("script");
+		oScript.onload=function(){
+			for(var i=0;i<allData.length;i++){
+				console.log(allData[i].width+"------"+allData[i].height);
+			}
+		}
+		oScript.src=addr;
+
+		document.getElementsByTagName("head")[0].appendChild(oScript);
+	}
+	
+
+	Jsonp(addr);
+
+
+// 	getMin=function(arr){
+// 		var min=arr[0];
+// 		var minIndex=0;
+// 		for(var i=1;i<arr.length;i++){
+// 			if(arr[i]<min){
+// 				min=arr[i];
+// 				minIndex=i;
+// 			}
+// 		}
+// 		return minIndex;
+// 	};
+	
+// console.log(getMin([2,8,9,1,7,4]));
+
+	// document.documentElement.onmousewheel=function(ev){
+	// 	console.log(ev.wheelDelta);
+	// }
+
+</script>
+</body>
+</html>

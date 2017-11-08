@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>弹性运动</title>
+		<style type="text/css">
+			html,body{
+				padding: 0;
+				margin: 0;
+			}
+			#box {
+				width: 150px;
+				height: 180px;
+				background-color: green;
+				margin-top: 50px;
+				left: 100px;
+				margin-left: 200px;
+				position: absolute;
+			}
+		</style>
+	</head>
+
+	<body>
+
+		<div id="box"></div>
+		<input type="button" name="btn" id="btn" value="click" />
+
+		<script type="text/javascript">
+			var oBox = document.getElementById("box");
+			var oBtn = document.getElementById("btn");
+			
+			oBtn.onclick = function() {
+				elastic(oBox,300);
+			}
+
+			
+			function elastic(elem,pos,fn){
+				var iSpeed=0;
+				var marginL=parseFloat(getStyle(elem,"marginLeft"));
+				clearInterval(timer);
+				var timer=setInterval(function() {
+					iSpeed+=(pos-oBox.offsetLeft+marginL)/50;
+					iSpeed*=0.95;
+					if(Math.abs(iSpeed)<=1&&Math.abs(pos-oBox.offsetLeft+marginL)<=1){
+						clearInterval(timer);
+						elem.style.left=pos+"px";
+						iSpeed=0;
+						fn&&fn.call(elem);
+					}else{
+
+						elem.style.left=(oBox.offsetLeft-marginL+iSpeed)+"px";
+						
+					}
+				}, 13);
+			}
+			function getStyle(elem, attr) {
+
+				return elem.currentStyle ? elem.currentStyle[attr] : window.getComputedStyle(elem, false)[attr];
+
+			}
+		</script>
+	</body>
+
+</html>

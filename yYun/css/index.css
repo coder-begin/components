@@ -1,0 +1,402 @@
+body {
+    width: 100%;
+    height: 100%;
+    background-color: #333;
+    margin: 0 auto;
+}
+
+header {
+    width: 100%;
+    height: 62px;
+    line-height: 62px;
+    position: relative;
+}
+
+.main {
+    width: 100%;
+    position: relative;
+}
+
+.main>.side {
+    width: 194px;
+    height: 100%;
+    position: absolute;
+    left: 0;
+    top: 0;
+}
+
+.side_footer {
+    width: 100%;
+    height: 74px;
+    bottom: 0;
+    left: 0;
+    position: absolute;
+    background-color: pink;
+}
+
+.main>.main_show {
+    width: 100%;
+    height: 100%;
+    padding-left: 194px;
+    box-sizing: border-box;
+}
+
+.content {
+    width: 100%;
+    height: 100%;
+    background-color: #fff;
+    border-radius: 10px 10px 0 0;
+    overflow: hidden;
+}
+
+.station_icon {
+    width: 142px;
+    height: 32px;
+    background: url('../src/img/title_ico.png') no-repeat center center;
+    padding: 15px 26px;
+    cursor: pointer;
+    position: absolute;
+    left: 0;
+    top: 0;
+}
+
+.side_nav {
+    margin-top: 12px;
+}
+
+.side_nav>li {
+    height: 45px;
+    width: 100%;
+    line-height: 45px;
+    text-align: left;
+    cursor: pointer;
+    font-size: 14px;
+    padding-left: 42px;
+    box-sizing: border-box;
+}
+
+.side_nav>li:hover {
+    background-color: rgba(255, 255, 255, 0.5);
+}
+
+nav {
+    height: 100%;
+    width: 100%;
+    padding-left: 194px;
+    box-sizing: border-box;
+}
+
+
+
+.tab>li {
+    height: 100%;
+    width: 36px;
+    margin: 0 25px;
+    font-size: 16px;
+    color: #fff;
+    float: left;
+    cursor: pointer;
+    position: relative;
+}
+
+.tab>li:hover {
+    color: #ddd;
+}
+
+.focus_line {
+    width: 36px;
+    height: 4px;
+    border-radius: 2px;
+    background-color: #fff;
+    position: absolute;
+    bottom: 10px;
+    left: -2px;
+}
+
+.user_info {
+    height: 100%;
+    font-size: 12px;
+    line-height: 62px;
+    color: #fff;
+}
+
+.user_info>* {
+    margin: 0 5px;
+}
+
+.user_head {
+    width: 30px;
+    height: 30px;
+    background-color: red;
+    border-radius: 15px;
+    margin: 16px 5px;
+}
+
+.user_name {
+    margin: 16px 5px;
+}
+
+.narrow {
+    width: 12px;
+    height: 7px;
+    background: url('../src/img/narrow_down.png');
+    margin: 27.5px 12px 27.5px 5px;
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+
+.narrow:hover {
+    transform: rotate(180deg);
+}
+
+.download {
+    margin-right: 20px;
+}
+
+.ad {
+    font-size: 12px;
+    color: #fa0;
+}
+
+.c_header {
+    width: 100%;
+    height: 50px;
+    background-color: #fff;
+}
+
+.fileUpGroup {
+    width: 86px;
+    overflow: hidden;
+    position: absolute;
+    margin: 17px 10px 0 15px;
+}
+
+.fileUpGroup:hover .btnUp {
+    border-radius: 5px 5px 0 0;
+}
+
+.fileUpGroup:hover .file_dropDown {
+    display: block;
+    border-radius: 0 0 5px 5px;
+}
+
+.btnUp {
+    height: 33px;
+    background-color: #3B8CFF;
+    border-radius: 5px;
+    cursor: pointer;
+    color: #fff;
+    text-align: center;
+    line-height: 33px;
+    font-size: 13px;
+}
+
+.fileUp,
+.dirUp {
+    position: relative;
+    height: 32px;
+    width: 100%;
+    background-color: #FFF;
+    text-align: center;
+    line-height: 32px;
+    color: #5FA1FF;
+    font-size: 13px;
+}
+
+.fileUp:hover {
+    background-color: #eee;
+}
+
+.dirUp:hover {
+    background-color: #eee;
+}
+
+.file_dropDown {
+    border-radius: 0 0 5px 5px;
+    border: 1px solid #C0D9FE;
+    overflow: hidden;
+    display: none;
+}
+.norBtnUp:nth-of-type(1){
+    margin-left: 111px;
+}
+.norBtnUp {
+    width: 96px;
+    height: 32px;
+    border: 1px solid #C0D9FE;
+    border-radius: 5px;
+    text-align: center;
+    line-height: 32px;
+    cursor: pointer;
+    font-size: 13px;
+    margin-right: 10px;
+
+    margin-top: 17px;
+    color: #5FA1FF;
+    background-color: #fff;
+}
+
+.norBtnUp:hover {
+    color: #5FB6FF;
+}
+
+.c_search {
+    width: 230px;
+    height: 32px;
+    background-color: #eee;
+    margin: 18px 10px 0 0;
+    border-radius: 16px;
+    padding-right: 40px;
+    box-sizing: border-box;
+    padding-left: 10px;
+    position: relative;
+    overflow: hidden;
+}
+
+
+.c_search>span {
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: 40px;
+    line-height: 32px;
+    text-align: center;
+    height: 100%;
+    font-size: 13px;
+    cursor: pointer;
+}
+
+.c_search>span:hover {
+
+    color: #333;
+}
+
+
+.c_search>input {
+    width: 100%;
+    height: 100%;
+    border: 0;
+    background-color: #eee;
+    outline: none;
+}
+
+.c_middle{
+   
+    box-sizing: border-box;
+}
+.y_frame {
+    width: 100%;
+    height: 500px;
+    overflow: hidden;
+   
+    position: relative;
+}
+
+
+
+.y_frame>.y_content {
+    position: absolute;
+    left: 0;
+  
+}
+
+.scrollFrame {
+    width: 10px;
+    height: 100%;
+    background-color: skyblue;
+    position: absolute;
+    right: 0;
+}
+
+.scrollBar {
+    width: 100%;
+    border-radius: 5px;
+    background-color: #aaa;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+.fileActive{
+    width: 100%;
+    height: 70px;
+    background-color: #aaa;
+
+}
+.fileInfo{
+    width: 100%;
+    height: 34px;
+    background-color: #fff;
+    padding-left: 16px;
+    padding-right: 10px;
+    overflow: hidden;
+    zoom:1;
+    box-sizing: border-box;
+}
+.fileInfo>div{
+    height: 100%;
+    line-height: 34px;
+    font-size: 12px;
+
+}
+.filePath>a{
+    color: #222;
+    margin: 0 3px;
+}
+.fileSort{
+    width: 100%;
+    height: 36px;
+    background-color: #fff;
+    padding-right: 10px;
+    box-sizing: border-box; 
+   
+}
+.fileSort>div{
+    cursor: pointer;
+    line-height: 34px;
+    font-size: 12px;
+    color: #999;
+    padding-left: 16px;
+    box-sizing: border-box;
+}
+.fileSort>div:hover{
+    background-color: #eee;
+}
+
+.y_file>li:last-child{
+    border-bottom: 1px solid #ddd;
+    
+}
+.y_file>li{
+    height: 43px;
+    width: 100%;
+    border-top: 1px solid #ddd;
+    font-size: 12px;
+    line-height: 43px;
+}
+.y_file>li:hover{
+    background-color: #eee;
+
+}
+
+.fileName{
+  
+    padding-left: 16px;
+    box-sizing: border-box;
+    line-height: 40px;
+    vertical-align: middle;
+}
+.fileSize{
+   
+     padding-left: 16px;
+    box-sizing: border-box;
+}
+.fileChangeDate{
+  
+     padding-left: 16px;
+    box-sizing: border-box;
+}
+.fileName a{
+    cursor: pointer;
+    color: #333;
+}

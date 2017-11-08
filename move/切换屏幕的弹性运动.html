@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>切换屏幕</title>
+		<style type="text/css">
+			#box{
+				width: 300px;
+				height: 450px;
+				padding: 0;
+				background-color: #aaa;
+				margin:50px auto;
+				position: relative;
+					overflow: hidden;
+				
+			}
+			ul{
+				padding: 0;
+				width: 1500px;
+				margin: 0;
+				position: absolute;
+			}
+			
+			li{
+				padding: 0;
+				margin: 0;
+				width: 300px;
+				height: 450px;
+				list-style: none;
+				float: left;
+			
+				
+			}
+		</style>
+	</head>
+	<body>
+			
+			<div id="box">
+				
+				<ul id="moveFrame">
+					<li></li>
+					<li></li>
+					<li></li>
+					<li></li>
+					<li></li>
+				</ul>
+				
+			</div>
+			
+		
+		
+		<script type="text/javascript">
+			var colors=["red","blue","yellow","pink","gray"];
+			var oLi=document.getElementsByTagName("li");
+			var oUl=document.getElementById("moveFrame");
+			var liIndex=0;
+			for(var i=0,j=oLi.length;i<j;i++){
+				
+				oLi[i].style.backgroundColor=colors[i];
+				oLi[i].onmousedown=function(ev){
+					var _this=this;
+					var ev=ev||window.event;
+					var disX=ev.clientX-oUl.offsetLeft;
+					var beginX=ev.clientX;
+					document.onmousemove=function(ev){
+						var ev=ev||window.event;
+						oUl.style.left=ev.clientX-disX+"px";
+
+						
+					}
+					document.onmouseup=function(ev){
+						var ev=ev||window.event;
+						document.onmousemove=document.onmouseup=null;
+						if(ev.clientX>beginX){
+							
+							if(liIndex!=0){
+								liIndex--;
+							}
+							move(oUl,-300*liIndex);
+						}else{
+							if(liIndex!=oLi.length-1){
+								liIndex++;
+							}
+							move(oUl,-300*liIndex);
+						}
+						
+					}
+					
+					return false;
+					
+				}
+
+			}
+			
+			
+			var timer=null
+
+			function move(elem,target){
+				
+				
+				var iSpeedX=0;
+					
+				clearInterval(timer);
+				timer=setInterval(function(){
+					
+					iSpeedX+=(target-elem.offsetLeft)/7;
+					iSpeedX*=0.8;
+					if(Math.abs(iSpeedX)<=1 && Math.abs(target-elem.offsetLeft)<=1){
+						
+						clearInterval(timer);
+						elem.style.left=target+"px";
+						iSpeedX=0;
+						
+					}else{
+						elem.style.left=elem.offsetLeft+iSpeedX+"px";
+						
+					}
+						
+					
+				},30);
+				
+				
+				
+				
+				
+			}
+			
+			
+			
+		</script>
+	</body>
+</html>

@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+	</head>
+
+	<body>
+		<ul>
+			<li>
+				<a href="#/">turn white</a>
+			</li>
+			<li>
+				<a href="#/blue">turn blue</a>
+			</li>
+			<li>
+				<a href="#/green">turn green</a>
+			</li>
+		</ul>
+		<script type="text/javascript">
+			//简单路由的实现
+			function Router(){
+				this.routes={};
+				this.currentPath="";
+			}
+			Router.prototype.route=function(path,callBack){
+				this.routes[path]=callBack||function(){};
+				
+				
+			}
+			Router.prototype.refresh=function(){
+				
+				this.currentPath=location.hash.slice(1)||"/";
+				this.routes[this.currentPath]();
+				console.log(this.currentPath);
+				
+			}
+			Router.prototype.init=function(){
+				var _this=this;
+				window.addEventListener("load",function(){
+					_this.refresh();
+				},false);
+				
+				window.onhashchange=function(){
+					
+					_this.refresh();
+					
+				}
+				
+			}
+			var router=new Router();
+			router.init();
+			
+			router.route("/",function(){
+				
+				alert("我是白色");
+			})
+			router.route("/blue",function(){
+				
+				alert("我是蓝色");
+			})
+			router.route("/green",function(){
+				
+				alert("我是绿色");
+			})
+			
+			
+			
+			
+			
+			
+			
+
+		</script>
+	</body>
+
+</html>

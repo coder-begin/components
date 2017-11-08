@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>靠近放大效果</title>
+    <style type="text/css">
+    .item_group {
+        position: absolute;
+        bottom: 50px;
+        text-align: center;
+        width: 100%;
+    }
+    </style>
+</head>
+
+<body>
+    <div class="item_group" id="items">
+        <img src="1.ico">
+        <img src="2.ico">
+        <img src="3.ico">
+        <img src="4.ico">
+    </div>
+    <script type="text/javascript">
+    var itemGroup = document.getElementById("items");
+
+    function moveBigger(parElem) {
+
+        this.pElem = parElem;
+        this.allItems = null;
+        this.itemsPos = [];
+        this.enLargeDis=250;
+        this.imgMaxSize=120;
+    }
+    moveBigger.prototype.setSize = function() {
+        var allItems = this.pElem.children;
+        this.allItems = allItems;
+        for (var i = 0, j = allItems.length; i < j; i++) {
+            allItems[i].style.width = "60px";
+            allItems[i].style.margin = "0 5px";
+        }
+
+    }
+    moveBigger.prototype.setMove = function(ev) {
+    	var itemsPos=this.itemsPos;
+    	var allItems=this.allItems;
+    	var scale=(this.imgMaxSize-60)/this.enLargeDis;
+    	for(i=0,j=itemsPos.length;i<j;i++){
+    		var dis=Math.sqrt(Math.pow(ev.clientX-itemsPos[i][0],2)+Math.pow(ev.clientY-itemsPos[i][1],2));
+    		if(dis<this.enLargeDis){
+    			allItems[i].style.width=this.imgMaxSize-dis*scale+"px";
+    		}
+    	}
+
+
+    }
+    moveBigger.prototype.getItemsPos = function() {
+        var _this = this;
+        var allItems = _this.allItems;
+        var parElemPosL = allItems[0].parentNode.offsetLeft;
+        var parElemPosT = allItems[0].parentNode.offsetTop;
+        for (var i = 0, j = allItems.length; i < j; i++) {
+            var itemPos = [allItems[i].offsetLeft + parElemPosL + allItems[i].offsetWidth / 2, allItems[i].offsetTop + parElemPosT + allItems[i].offsetHeight / 2];
+            _this.itemsPos.push(itemPos);
+        }
+    }
+    moveBigger.prototype.init = function() {
+        var _this = this;
+        this.setSize();
+        this.getItemsPos();
+        document.onmousemove = function(ev) {
+            var ev = ev || window.event;
+            _this.setMove(ev);
+        }
+        window.onresize = function() {
+
+        }
+    }
+
+    new moveBigger(itemGroup).init()
+    </script>
+</body>
+
+</html>

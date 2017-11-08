@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>随鼠标移动的眼睛</title>
+	<meta charset="utf-8">
+	<style type="text/css">
+		.eye1{
+			width: 10px;
+			height: 10px;
+			background-color: #000;
+			border-radius: 5px;
+			position: absolute;
+			top: 50%;
+			margin-top: -5px;
+			left: 140px;
+		}	
+		.eye2{
+			width: 10px;
+			height: 10px;
+			background-color: #000;
+			border-radius: 5px;
+			position: absolute;
+			top: 50%;
+			margin-top: -5px;
+			left: 260px;
+		}		
+
+		.box{
+			width: 400px;
+			height: 400px;
+			background-color:#1ef;
+			margin: 50px auto;
+			overflow: hidden;
+			position: relative;
+		}
+
+	</style>
+</head>
+<body>
+	<div class="box" id="box">
+
+		<div class="eye1"></div>
+		<div class="eye2"></div>
+		
+	</div>
+
+
+<script type="text/javascript">
+	
+	var oBox=document.getElementById("box");
+	var oEye=oBox.children;
+	var eyeOnePos=[oEye[0].offsetLeft+oBox.offsetLeft+5,oEye[0].offsetTop+oBox.offsetTop+5];
+	var eyeTwoPos=[oEye[1].offsetLeft+oBox.offsetLeft+5,oEye[1].offsetTop+oBox.offsetTop+5];
+
+	document.onmousemove=function(ev){
+		var ev=ev||window.event;
+		
+		changeEye(ev,0);
+		changeEye(ev,1);
+		function changeEye(ev,elemNum){
+			var mX=ev.clientX;
+			var mY=ev.clientY;
+			var eyeX=0;
+			var eyeY=0;
+			var hypotenuse;
+			var differX,differY;
+			var elemX=0;
+			var elem=oEye[elemNum];
+			if(elemNum==0){
+				hypotenuse=Math.sqrt(Math.pow(eyeOnePos[0]-mX,2)+Math.pow(eyeOnePos[1]-mY,2));
+				differX=(hypotenuse-50)/hypotenuse*Math.abs(eyeOnePos[0]-mX);
+				differY=(hypotenuse-50)/hypotenuse*Math.abs(eyeOnePos[1]-mY);
+				elemX=eyeOnePos[0];
+
+			}else if(elemNum==1){
+				hypotenuse=Math.sqrt(Math.pow(eyeTwoPos[0]-mX,2)+Math.pow(eyeTwoPos[1]-mY,2));
+				differX=(hypotenuse-50)/hypotenuse*Math.abs(eyeTwoPos[0]-mX);
+				differY=(hypotenuse-50)/hypotenuse*Math.abs(eyeTwoPos[1]-mY);
+				elemX=eyeTwoPos[0];
+			}
+			
+		
+			if(mX<elemX){
+				//左边
+				eyeX=mX+differX;
+			}else{
+				eyeX=mX-differX;
+
+			}
+
+
+			if(mY>eyeTwoPos[1]){
+				eyeY=mY-differY;
+			}else{
+				eyeY=mY+differY;
+			}
+
+			elem.style.left=eyeX-oBox.offsetLeft+"px";
+			elem.style.top=eyeY-oBox.offsetTop+"px";
+
+
+
+		}
+
+		
+
+
+	}
+
+
+</script>
+</body>
+</html>

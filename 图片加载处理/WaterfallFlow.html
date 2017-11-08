@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>瀑布流</title>
+    <style type="text/css">
+    * {
+        padding: 0;
+        margin: 0;
+    }
+	body{
+		background-color: #eee;
+	}
+    #box {
+        margin: 0px auto;
+        border: 1px solid #000;
+        zoom: 1;
+        padding: 0;
+    }
+
+    #box:after {
+        content: "";
+        display: block;
+        clear: both;
+    }
+
+    #box>div {
+
+       
+    }
+    </style>
+</head>
+
+<body>
+    <div id="box">
+    </div>
+
+
+
+    <script type="text/javascript">
+    var oBox = document.getElementById("box");
+    var imgData=null;
+    function WaterfallFlow(boxElem) {
+        this.boxElem = boxElem;
+        this.MARGIN = 10;
+        this.ITEMW = 200;
+        this.colLen=[];
+        this.pageIndex=0;
+
+
+    }
+    WaterfallFlow.prototype.changeCol = function() {
+
+
+
+
+    }
+    WaterfallFlow.prototype.initCol = function() {
+    	var _this=this;
+        var wWidth = document.documentElement.offsetWidth;
+        var colNum = Math.floor(wWidth / (this.MARGIN + this.ITEMW));
+        var norIStyle = "float:left;width:" + this.ITEMW + "px;";
+        for(var k=0;k<colNum;k++){
+			this.colLen[k]=0;
+        }
+        for (var i = 1, j = colNum; i <= j; i++) {
+            var oDiv = document.createElement("div");
+            if (i % colNum == 0) {
+                oDiv.style = norIStyle;
+            } else {
+                oDiv.style = norIStyle + "margin-right:" + this.MARGIN + "px;";
+            }
+            this.boxElem.appendChild(oDiv);
+        }
+        this.boxElem.style.width = this.ITEMW * colNum + this.MARGIN * (colNum - 1) + "px";
+
+        _this.getJSON(++this.pageIndex,_this.insertPic);
+       
+       
+
+    }
+    WaterfallFlow.prototype.insertPic=function(){
+    		var _this=this;
+			var allCol=_this.boxElem.children;
+			var data=imgData;
+			var dataLen=data.length;
+        	for(var i=0;i<dataLen;i++){
+        		var minLen=WaterfallFlow.getMin(_this.colLen);
+        		var imgHeight=200/data[i].width*data[i].height;
+        		_this.colLen[minLen]+=(imgHeight+10);
+        		var oImg=document.createElement("img");
+        		oImg.style.width=_this.ITEMW+"px";
+        		oImg.style.height=imgHeight+"px"
+        		;
+        		oImg.style.marginBottom=_this.MARGIN+"px";
+        		oImg.src=data[i].preview;
+        		allCol[minLen].appendChild(oImg);
+        	}
+        }
+    WaterfallFlow.prototype.whellGData=function(ev){
+			var colLen=this.colLen;
+			var minIndex=WaterfallFlow.getMin(colLen);
+			var wHeight=document.documentElement.scrollTop+document.documentElement.clientHeight;
+			for(var i=0;i<colLen.length;i++){
+				if(wHeight+100>colLen[i]){
+					this.getJSON(++this.pageIndex,this.insertPic);
+					break;
+				}
+			}
+    }
+    WaterfallFlow.prototype.init = function() {
+        var _this = this;
+        var wH=document.documentElement.clientHeight;
+        _this.initCol();
+        window.onresize = function() {
+            _this.changeCol();
+        }
+        document.documentElement.onmousewheel=function(ev){
+        	var ev=ev||window.event;
+			_this.whellGData(ev);
+		}
+      	
+
+    }
+    WaterfallFlow.prototype.getJSON=function(pageIndex,callBack){
+    	var _this=this;
+    	var oScript=document.createElement("script");
+    	oScript.src="http://www.wookmark.com/api/json/popular?callback=WaterfallFlow.getData&page="+pageIndex;
+    	oScript.onload=function(){
+    		callBack.call(_this);
+    	}
+    	var oHead=document.getElementsByTagName("head")[0];
+    	oHead.appendChild(oScript);
+
+    }
+
+    WaterfallFlow.getMin=function(arr){
+		var min=arr[0];
+		var minIndex=0;
+		for(var i=1;i<arr.length;i++){
+			if(arr[i]<min){
+				min=arr[i];
+				minIndex=i;
+			}
+		}
+		return minIndex;
+	};
+
+    WaterfallFlow.getData=function(data){
+    	imgData=data;
+    }
+
+    new WaterfallFlow(oBox).init();
+    </script>
+</body>
+
+</html>

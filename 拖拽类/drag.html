@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<style type="text/css">
+			
+			#div1{
+				width: 50px;
+				height: 50px;
+				background-color: #000;
+				position: absolute;
+			}
+			#box{
+				width: 500px;
+				height: 500px;
+				background-color:yellow;
+				position:relative;
+				margin:  0 auto;
+			}
+			
+		</style>
+	</head>
+	<body>
+		
+		<div class="box" id="box">
+			
+			<div id="div1">
+			
+			
+			</div>
+		</div>
+		
+		
+		
+		
+		<script type="text/javascript">
+			
+			/**
+			 * 拖拽的实现是通过onmousedown后添加onmousemove和onmouseup来实现的
+			 * 注意点:拖拽在onmousemove是document来实现
+			 * 
+			 * 
+			 */
+			
+			function drag(elemMove,parentRange){
+				console.log(parentRange.offsetLeft)
+				elemMove.onmousedown=function(ev){
+					var ev=ev||window.event,
+						disX=ev.clientX-elemMove.offsetLeft,//鼠标相对于被拖动元素的X轴位移
+						disY=ev.clientY-elemMove.offsetTop;//鼠标相对于被拖动元素的Y轴位移
+					if(elemMove.setCapture){
+						//使用全局捕获来阻止文字和图片的默认行为,全局捕获使得事件无法被传送到文字和图片上
+						elemMove.setCapture();
+					}
+					document.onmousemove=function(ev){
+						var ev=ev||window.event;
+						var disTop=ev.clientY-disY,
+							disLeft=ev.clientX-disX;
+							
+						//判定有没有超出框子
+						
+						
+						if(disLeft<0){
+							disLeft=0;
+						}
+						if(disLeft>parentRange.offsetWidth-elemMove.offsetWidth){
+							disLeft=parentRange.offsetWidth-elemMove.offsetWidth;
+						}
+						if(disTop<0){
+							disTop=0;
+						}
+						if(disTop>parentRange.offsetHeight-elemMove.offsetHeight){
+							disTop=parentRange.offsetHeight-elemMove.offsetHeight;
+
+						}
+						
+						
+							
+						elemMove.style.top=disTop+"px";
+						elemMove.style.left=disLeft+"px";
+						
+						
+					}
+					
+					document.onmouseup=function(ev){
+						var ev=ev||window.event;
+						//清除onmousemove事件
+						document.onmousemove=elemMove.onmousemove=document.onmouseup=null;
+						
+						//判定释放鼠标时候的距离可以实现一个磁性吸附的效果
+//						if(ev.clientX-disX<=100){
+//							elemMove.style.left=0+"px";
+//						}
+						
+						
+						//释放全局捕获
+						if(elemMove.releaseCapture){
+
+							elemMove.releaseCapture();
+						}
+					}
+					
+					//阻止图片和文字的默认拖拽行为
+					return false;	
+					
+					
+				}
+				
+
+				
+			}
+				
+				
+				drag(document.getElementById("div1"),document.getElementById("box"));
+				
+			
+		</script>
+		
+		
+		
+		
+	</body>
+</html>

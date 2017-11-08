@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>圆周运动</title>]
+    <style type="text/css">
+    .box {
+        width: 500px;
+        margin: 50px auto;
+        border: 1px solid #000;
+    }
+    </style>
+</head>
+
+<body>
+    <div class="box">
+        <canvas id="draw" width="500" height="500">
+        </canvas>
+        <input type="button" value="begin" id="btn" />
+    </div>
+    <script type="text/javascript">
+    var oCanvas = document.getElementById("draw");
+    var oBtn = document.getElementById("btn");
+
+    function moveCircle(canElem) {
+        this.cElem = canElem;
+        this.center = [200, 200];
+        this.isBegin = false;
+        this.ang = 0;
+
+    }
+    moveCircle.prototype.showTrack = function() {
+        if (this.cElem.getContext) {
+            var ctx = this.cElem.getContext("2d");
+            ctx.beginPath();
+            ctx.arc(this.center[0], this.center[1], 150, 0, 2 * Math.PI, false);
+            ctx.stroke();
+        }
+
+
+
+    }
+
+    moveCircle.prototype.beginMove = function() {
+        var _this = this;
+        var iSpeed = 2 * Math.PI / 180;
+        
+        var timer=null;
+        	clearInterval(timer);
+        	timer=setInterval(function() {
+        		if(_this.isBegin){
+		            _this.ang += iSpeed;
+		            var posX = _this.center[0] + Math.cos(_this.ang) * 150;
+		            var posY = _this.center[1] + Math.sin(_this.ang) * 150;
+		            drawCircle(posX, posY);
+	            }else{
+	            	clearInterval(timer);
+        		}
+       		 }, 50);
+        
+        
+
+        function drawCircle(x, y) {
+                
+                if (_this.cElem.getContext) {
+
+                    var ctx = _this.cElem.getContext("2d");
+                    ctx.clearRect(0, 0, 500, 500);
+                    ctx.beginPath();
+                    ctx.arc(_this.center[0], _this.center[1], 150, 0, 2 * Math.PI, false);
+                    ctx.stroke();
+                    ctx.beginPath();
+                    ctx.arc(x, y, 10+y/300*60, 0, 2 * Math.PI, false);
+                    ctx.fill();
+
+
+                }
+        
+
+        }
+
+    }
+    moveCircle.prototype.init = function() {
+        var _this = this;
+        this.showTrack();
+        oBtn.onclick = function() {
+        	_this.isBegin=!_this.isBegin;
+            _this.beginMove();
+        }
+    }
+
+
+    new moveCircle(oCanvas).init();
+    </script>
+</body>
+
+</html>

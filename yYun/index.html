@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>百度云</title>
+    <link rel="shortcut icon" href="./src/img/favicon.ico" />
+    <link rel="stylesheet" type="text/css" href="./css/index.css" />
+    <link rel="stylesheet" type="text/css" href="./css/normal.css" />
+    <script src="./js/htmlshiv.js"></script>
+    <script type="text/javascript" src="js/jquery2.0.3.js"></script>
+    <script type="text/javascript" src="js/Router.js"></script>
+</head>
+
+<body>
+    <div class="mask">
+    </div>
+    <header>
+        <div class="station_icon "></div>
+        <nav class="clear">
+            <ul class="tab clear fl">
+                <li>网盘<span class="focus_line"></span></li>
+                <li>分享</li>
+                <li>更多</li>
+            </ul>
+            <div class="user_info fr clear">
+                <span class="fl user_head"></span>
+                <span class="fl">rulersex</span>
+                <span class="fl narrow"></span>
+                <span class="fl">|</span>
+                <span class="fl download">客户端下载</span>
+            </div>
+            <a href="#" class="fr ad">超级会员,超低价</a>
+        </nav>
+    </header>
+    <div class="main">
+        <div class="side">
+            <ul class="side_nav">
+                <li>
+                    <a href="#">全部文件</a>
+                </li>
+                <li>
+                    <a href="#">图片</a>
+                </li>
+                <li>
+                    <a href="#">文档</a>
+                </li>
+                <li>
+                    <a href="#">视频</a>
+                </li>
+                <li>
+                    <a href="#">种子</a>
+                </li>
+                <li>
+                    <a href="#">音乐</a>
+                </li>
+                <li>
+                    <a href="#">其他</a>
+                </li>
+            </ul>
+            <div class="side_footer"></div>
+        </div>
+        <div class="main_show">
+            <div class="content">
+                <div class="c_header clear ">
+                    <form class="fl">
+                        <div class="fileUpGroup">
+                            <div class="btnUp">上传</div>
+                            <input type="file" name="file" value="上传">
+                            <div class="file_dropDown">
+                                <div class="fileUp">
+                                    <div>
+                                        上传文件
+                                    </div>
+                                    <input type="file" name="file">
+                                </div>
+                                <div class="dirUp">上传文件夹
+                                    <input type="file" name="file">
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                    <div class="norBtnUp fl" id="newFolder">新建文件夹</div>
+                    <div class="norBtnUp fl" id="offline_download">离线下载</div>
+                    <div class="norBtnUp fl">我的设备</div>
+                    <div class="c_sort fr clear">
+                        <div class="c_search">
+                            <input type="text" name="">
+                            <span>搜索</span>
+                        </div>
+                    </div>
+                   
+                </div>
+         		<div class="fileActive">
+         			<div class="fileInfo clear">
+         				<div class="filePath fl">
+                            <a href="#/">全部文件</a>
+
+                        </div>
+         				<div class="loadFileNum fr">已全部加载,共<span id="fileNum"></span>个</div>
+         				
+
+         			</div>
+         			<div class="fileSort clear">
+         				<div class="w60 fl">
+      						<input type="checkbox" id="selAll" class="checkbox verC">
+      						<span class="verC"">文件名</span>
+         				</div>
+         				<div class="w15 fl">大小</div>
+         				<div class="w25 fl">修改日期</div>
+         			</div>
+         		</div>
+
+                <div class="c_middle">
+                    <div class="y_frame" id="y_frame">
+                        <div class="y_content" >
+                            <ul class="y_file" id="yItems">
+                               
+                            </ul>
+                        </div>
+                        <div class="scrollFrame">
+                            <div class="scrollBar"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script type="text/javascript" src="js/tools.js"></script>
+    <script type="text/javascript" src="js/scroll.js"></script>
+    <script src="js/index.js" type="text/javascript" charset="utf-8"></script>
+
+    <!-- <script type="text/javascript" src="test/test.js"></script> -->
+</body>
+
+</html>

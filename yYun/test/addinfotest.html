@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+	<script type="text/javascript" src="../infos.js"></script>
+</head>
+<body>
+
+
+<script type="text/javascript">
+	
+	var parseUrlToArr = function(url) {
+        var hashs = url.split("/");
+        var hashArr = [];
+
+        for (var i = 0; i < hashs.length; i++) {
+            if (hashs[i] !== "") {
+                hashArr.push(hashs[i]);
+            }
+        }
+        return hashArr;
+    }
+
+
+	function addInfos(path) {
+        var date=new Date();
+        var pathArr=parseUrlToArr(path.slice(1));
+        var newFInfos={
+            "fileType":"folder",
+            "fileName":pathArr[pathArr.length-1],
+            "level":pathArr.length-1,
+            "fileSize":"...",
+            "date":date.getFullYear()+"."+(date.getMonth()+1)+"."+date.getDate(),
+            "children":null
+        }
+        console.log(pathArr);
+        function searchPos(data,pathArr,index){
+            for(var i=0;i<data.length;i++){
+                if(data[i].fileName==pathArr[index]){
+                    if(index==pathArr.length-2){
+                       	data[i].children.push(newFInfos);
+                        return;
+                    }
+                    searchPos(data[i].children,pathArr,++index);
+                }
+            }
+        }
+        searchPos(fileDir,pathArr,0);
+       
+    }
+
+    addInfos("/网络编程上机/web上机/新建文件夹");
+
+    console.log(fileDir);
+    
+</script>
+</body>
+</html>
